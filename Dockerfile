@@ -1,3 +1,4 @@
+# Builder
 FROM alpine:latest as builder
 LABEL Maintainer="lans.rf@gmail.com"
 
@@ -11,15 +12,12 @@ RUN mkdir -p /telegram-bot-api/build && \
      cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/telegram-bot-api/install /telegram-bot-api/src && \
      cmake --build . --target install -j`nproc`
 
+# Main image
 FROM alpine:latest
 LABEL Maintainer="lans.rf@gmail.com"
-
-RUN mkdir -p /telegram-bot-api/files /telegram-bot-api/temp
-
+RUN apk add zlib openssl gperf && \
+    mkdir -p /telegram-bot-api/files /telegram-bot-api/temp
 COPY --from=builder /telegram-bot-api/install/bin/telegram-bot-api /telegram-bot-api/
+EXPOSE 8081
 
-ENTRYPOINT [ "/telegram-bot-api/telegra-bot-api", \
-             "--api-id", "$API_ID", \
-             "--api-hash", "$API_HASH", \
-             "--dir", "/telegram-bot-api/files", \
-             "--temp-dir", "/telegram-bot-api/temp" ]
+ENTRYPOINT [ "sh", "-c", "/telegram-bot-api/telegram-bot-api --api-id $API_ID --api-hash $API_HASH --dir /telegram-bot-api/files --temp-dir /telegram-bot-api/temp" ]
