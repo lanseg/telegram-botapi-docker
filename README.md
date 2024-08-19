@@ -9,6 +9,10 @@
 Environment variables:
 * API_ID 
 * API_HASH
+* HTTP_PORT - on this port the bot api will listen for connections
+
+There are many more configuration options, they could be used by creating your own 
+docker image from this.
 
 Directories and files:
 * /telegram-bot-api/files here bot api stores downloaded files and other working data

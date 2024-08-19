@@ -15,9 +15,14 @@ RUN mkdir -p /telegram-bot-api/build && \
 # Main image
 FROM alpine:latest
 LABEL Maintainer="lans.rf@gmail.com"
+
+ENV API_ID=some_env_id \
+    API_HASH=some_api_hash \
+    HTTP_PORT=8081
+
 RUN apk add zlib openssl gperf && \
     mkdir -p /telegram-bot-api/files /telegram-bot-api/temp
 COPY --from=builder /telegram-bot-api/install/bin/telegram-bot-api /telegram-bot-api/
 EXPOSE 8081
 
-ENTRYPOINT [ "sh", "-c", "/telegram-bot-api/telegram-bot-api --api-id $API_ID --api-hash $API_HASH --dir /telegram-bot-api/files --temp-dir /telegram-bot-api/temp" ]
+ENTRYPOINT [ "sh", "-c", "/telegram-bot-api/telegram-bot-api --api-id $API_ID --api-hash $API_HASH --dir /telegram-bot-api/files --temp-dir /telegram-bot-api/temp --http-port=$HTTP_PORT " ]
