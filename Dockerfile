@@ -26,4 +26,4 @@ COPY --from=builder /telegram-bot-api/install/bin/telegram-bot-api /telegram-bot
 COPY entrypoint.sh /telegram-bot-api/entrypoint.sh
 EXPOSE 8081
 
-ENTRYPOINT [ "/telegram-bot-api/entrypoint.sh" ]
+ENTRYPOINT [ "sh", "/telegram-bot-api/entrypoint.sh" ]
